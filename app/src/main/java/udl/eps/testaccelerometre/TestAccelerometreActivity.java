@@ -17,7 +17,6 @@ public class TestAccelerometreActivity extends Activity implements SensorEventLi
      private SensorManager sensorManager;
      private boolean color = false;
      private TextView view, textViewMiddle, textViewEnd;
-     private ScrollView scrollView;
      private long lastUpdate;
      private long lastLightUpdate;
      private String to_add="";
@@ -33,6 +32,8 @@ public class TestAccelerometreActivity extends Activity implements SensorEventLi
      private static  String LOW = "LOW Intensity \n";
      private static  String MEDIUM = "MEDIUM Intensity \n";
      private static  String HIGH = "HIGH Intensity \n";
+     private static  String SAVED = "to_add";
+     private static  String COLORED = "color";
 
 
 
@@ -62,6 +63,12 @@ public class TestAccelerometreActivity extends Activity implements SensorEventLi
         textViewEnd.setBackgroundColor(Color.YELLOW);
 
         sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
+
+        if(savedInstanceState != null)
+        {
+            to_add = savedInstanceState.getString(SAVED);
+            color = savedInstanceState.getBoolean(COLORED);
+        }
 
       }
 
@@ -158,7 +165,7 @@ public class TestAccelerometreActivity extends Activity implements SensorEventLi
 
           if(difference > 500 || difference < -500)
           {
-              if (actualTime - lastLightUpdate < 200)
+              if (actualTime - lastLightUpdate < 1000)
               {
                   return;
               }
@@ -234,5 +241,12 @@ public class TestAccelerometreActivity extends Activity implements SensorEventLi
 
           super.onStop();
           sensorManager.unregisterListener(this);
+      }
+
+      @Override
+      public void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+        savedInstanceState.putString(SAVED, to_add);
+        savedInstanceState.putBoolean(COLORED, color);
       }
 } 
