@@ -25,7 +25,19 @@ public class TestAccelerometreActivity extends Activity implements SensorEventLi
      private float umbral_alt = 30000;
      private float last_light_value = 0;
 
-     /*
+     private static  String NOM = "Nom: ";
+     private static  String MAX_RANG = "Max. Rang: ";
+     private static  String LXS = " lxs";
+     private static  String NEW_VALUE = "New value light sensor = ";
+     private static  String INTENSITY = " intensity";
+     private static  String LOW = "LOW Intensity \n";
+     private static  String MEDIUM = "MEDIUM Intensity \n";
+     private static  String HIGH = "HIGH Intensity \n";
+
+
+
+
+    /*
      * Bones Practiques que faltarien:
      * 1. Verify sensors before you use them
      * 2. Register/unregister sensor listeners
@@ -89,15 +101,15 @@ public class TestAccelerometreActivity extends Activity implements SensorEventLi
               sensorManager.registerListener(this,
                       sensor,
                       SensorManager.SENSOR_DELAY_NORMAL);
-              // register this class as a listener for the accelerometer sensor
+              // register this class as a listener for the light sensor
               lastLightUpdate = System.currentTimeMillis();
 
-              //Sensor sensor = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
+
               lastLightUpdate = 15000;
               float max = sensor.getMaximumRange();
               String name = sensor.getName();
-              to_add +="Nom: " + name + "\n";
-              to_add +="Max. rang: " +  max + "lxs" + "\n";
+              to_add += NOM + name + "\n";
+              to_add += MAX_RANG +  max + LXS + "\n";
               textViewEnd.setText(to_add);
 
           }
@@ -143,7 +155,6 @@ public class TestAccelerometreActivity extends Activity implements SensorEventLi
           float value = event.values[0];
           long actualTime = System.currentTimeMillis();
           float difference = value - last_light_value;
-          System.out.println("Difference: " + difference);
 
           if(difference > 500 || difference < -500)
           {
@@ -155,18 +166,18 @@ public class TestAccelerometreActivity extends Activity implements SensorEventLi
               last_light_value = value;
               lastUpdate = actualTime;
 
-              to_add += "New value light sensor = " + value + "\n";
+              to_add += NEW_VALUE+ value + "\n";
               if (value < umbral_baix)
               {
-                  to_add += "LOW Intensity \n";
+                  to_add += LOW;
               }
               else if (value > umbral_alt)
               {
-                  to_add += "HIGH Intensity \n";
+                  to_add += HIGH;
               }
               else
               {
-                  to_add += "MEDIUM Intensity \n";
+                  to_add += MEDIUM;
               }
 
               textViewEnd.setText(to_add);
@@ -187,9 +198,6 @@ public class TestAccelerometreActivity extends Activity implements SensorEventLi
             / (SensorManager.GRAVITY_EARTH * SensorManager.GRAVITY_EARTH);
         long actualTime = System.currentTimeMillis();
 
-        //System.out.println("Estoy en la verga: " + accelationSquareRoot);
-
-        // Por defecto esta en 2 a ver si te va :)
         if (accelationSquareRoot >= 1.5)
         {
           if (actualTime - lastUpdate < 200) {
@@ -211,10 +219,6 @@ public class TestAccelerometreActivity extends Activity implements SensorEventLi
       @Override
       public void onAccuracyChanged(Sensor sensor, int accuracy) {
         // Do something here if sensor accuracy changes.
-         /* if(sensor.getType() == Sensor.TYPE_LIGHT)
-          {
-              getLight(accuracy);
-          }*/
       }
 
       /* Puede ser onPause o onStop*/
